@@ -21,6 +21,7 @@ import com.google.common.collect.ImmutableMap;
 import com.samskivert.mustache.Mustache;
 import com.samskivert.mustache.Mustache.Lambda;
 import com.samskivert.mustache.Template;
+import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.media.ArraySchema;
 import io.swagger.v3.oas.models.media.Schema;
 import org.apache.commons.lang3.StringUtils;
@@ -150,14 +151,21 @@ public class ElmClientCodegen extends DefaultCodegen implements CodegenConfig {
         importMapping.clear();
 
         cliOptions.clear();
+    }
+
+    @Override
+    public void preprocessOpenAPI(OpenAPI openAPI) {
+        final String modelPackageAsPath = modelPackage().replace('.', File.separatorChar);
 
         apiTemplateFiles.put("operation.mustache", ".elm");
         modelTemplateFiles.put("model.mustache", ".elm");
-        supportingFiles.add(new SupportingFile("Api.mustache", "", "src" + File.separator + "Api.elm"));
-        supportingFiles.add(new SupportingFile("Time.mustache", "", "src" + File.separator + "Api" + File.separator + "Time.elm"));
+        supportingFiles.add(new SupportingFile("Api.mustache", "src", modelPackageAsPath + ".elm"));
+        supportingFiles.add(new SupportingFile("Time.mustache", "src" + File.separator + modelPackageAsPath,   "Time.elm"));
         supportingFiles.add(new SupportingFile("elm.mustache", "", "elm.json"));
         supportingFiles.add(new SupportingFile("gitignore.mustache", "", ".gitignore"));
         supportingFiles.add(new SupportingFile("README.mustache", "", "README.md"));
+
+        super.preprocessOpenAPI(openAPI);
     }
 
     @Override
