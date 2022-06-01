@@ -48,6 +48,9 @@ public class ElmClientCodegen extends DefaultCodegen implements CodegenConfig {
     protected String packageName = "openapi";
     protected String packageVersion = "1.0.0";
 
+    public static final String API_PACKAGE_DEFAULT = "Api.Request";
+    public static final String MODEL_PACKAGE_DEFAULT = "Api";
+
     public CodegenType getTag() {
         return CodegenType.CLIENT;
     }
@@ -86,8 +89,8 @@ public class ElmClientCodegen extends DefaultCodegen implements CodegenConfig {
         );
 
         templateDir = "elm";
-        apiPackage = "Api.Request";
-        modelPackage = "Api";
+        apiPackage = API_PACKAGE_DEFAULT;
+        modelPackage = MODEL_PACKAGE_DEFAULT;
 
         supportsInheritance = true;
 
@@ -151,6 +154,8 @@ public class ElmClientCodegen extends DefaultCodegen implements CodegenConfig {
         importMapping.clear();
 
         cliOptions.clear();
+        cliOptions.add(new CliOption(CodegenConstants.MODEL_PACKAGE, CodegenConstants.MODEL_PACKAGE_DESC).defaultValue(MODEL_PACKAGE_DEFAULT));
+        cliOptions.add(new CliOption(CodegenConstants.API_PACKAGE, CodegenConstants.API_PACKAGE_DESC).defaultValue(API_PACKAGE_DEFAULT));
     }
 
     @Override
